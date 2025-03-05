@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # ports:
+    #   - "5432:5432"
+  backend:
+    build: ./backend
+    # ports:
+    #   - "8000:8000" 
+    depends_on:
+      - db
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+  frontend:
+    build: ./frontend 
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    volumes:
+      - ./frontend:/app
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      # - ./certs:/etc/nginx/certs
+    depends_on:
+      - frontend
+  telegram_bot:
+    build: ./telegram_bot
+    depends_on:
+      - db
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+      - ./settings:/app/data
+
+
+volumes:
+  pgdata:

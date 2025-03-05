@@ -1,0 +1,11 @@
+certifi==2024.12.14
+cffi==1.17.1
+charset-normalizer==3.4.1
+cryptography==44.0.0
+idna==3.10
+PyJWT
+psycopg2-binary
+pycparser==2.22
+pyTelegramBotAPI==4.26.0
+requests==2.32.3
+urllib3==2.3.0

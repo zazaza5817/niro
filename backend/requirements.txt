@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic-settings
+pydantic
+python-dotenv
+pyjwt
+requests
+telebot
+httpx
+psycopg2-binary

@@ -1,0 +1,33 @@
+{
+    "1month": {
+        "price": 150,
+        "duration": 30,
+        "title": "Подписка на месяц",
+        "description": "Действует 30 дней",
+        "label": "Подписка",
+        "payload": "1month",
+        "name": "1 месяц",
+        "price_per_month": 150
+        
+    },
+    "3month": {
+        "price": 375,
+        "duration": 90,
+        "title": "Подписка на 3 месяца",
+        "description": "Действует 90 дней",
+        "label": "Подписка",
+        "payload": "3month",
+        "name": "3 месяца",
+        "price_per_month": 125
+    },
+    "6month": {
+        "price": 690,
+        "duration": 180,
+        "title": "Подписка на 6 месяцев",
+        "description": "Действует 180 дней",
+        "label": "Подписка",
+        "payload": "6month",
+        "name": "6 месяцев",
+        "price_per_month": 115
+    }
+}
