@@ -1,53 +1,70 @@
-version: "3.9"
+version: '3.3'
+
 services:
-  db:
-    image: postgres:latest
-    restart: always
-    env_file:
-      - .env
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    # ports:
-    #   - "5432:5432"
-  backend:
-    build: ./backend
-    # ports:
-    #   - "8000:8000" 
-    depends_on:
-      - db
-    env_file:
-      - .env
-    volumes:
-      - ./backend:/app
   frontend:
-    build: ./frontend 
+    build:
+      context: ./frontend
+    volumes:
+      - frontend_build:/app/dist
     depends_on:
       - backend
-    env_file:
-      - .env
+
+  backend:
+    build:
+      context: ./backend
     volumes:
-      - ./frontend:/app
+      - ./backend:/app
+      - ./logs:/app/logs
+      - ./settings:/app/data
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - TG_TOKEN=${TG_TOKEN}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - DEBUG=${DEBUG}
+
+    depends_on:
+      - db
+    restart: always
 
   nginx:
-    image: nginx:latest
+    image: nginx:alpine
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
-      # - ./certs:/etc/nginx/certs
+      - ./certs:/etc/nginx/certs:ro
+      - frontend_build:/usr/share/nginx/html
     depends_on:
       - frontend
+      - backend
+    restart: always
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db_init:/docker-entrypoint-initdb.d
+
   telegram_bot:
     build: ./telegram_bot
     depends_on:
       - db
-    env_file:
-      - .env
+      - backend
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - TG_TOKEN=${TG_TOKEN}
     volumes:
       - ./logs:/app/logs
       - ./settings:/app/data
-
+    restart: always
 
 volumes:
   pgdata:
+  frontend_build:

@@ -8,29 +8,26 @@ import os
 import logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',  # Формат сообщений
-    filename='logs/adduser.log',  # Файл для логов
-    filemode='a' 
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    filename='logs/adduser.log',
+    filemode='a'
 )
 
 connect_str = os.environ.get('DATABASE_URL')
-tg_tok = os.environ.get('TG_TOKEN')
-bot = telebot.TeleBot(tg_tok)
-INFO_CHAT = os.environ.get('INFO_CHAT_ID')
-
+bot = telebot.TeleBot("123:qwer")
 servers = {
     '1': {
-        'BASE_URL': "https://server.com/xUIpanel",
-        'PUBLIC_KEY': "312123",
-        'SHORT_ID': "321123",
-        'SUB_ID': "123123",
-        'CONNECTION_NAME': "exampleconn",
-        'SERVER_ADDRESS': "server.com",
-        'SERVER_PORT': "444",
-        'login_url': "https://server.com/login",
+        'BASE_URL': "https://url.com/123/panel",
+        'PUBLIC_KEY': "pbk",
+        'SHORT_ID': "sh_id",
+        'SUB_ID': "sub_id",
+        'CONNECTION_NAME': "some_name",
+        'SERVER_ADDRESS': "url.com",
+        'SERVER_PORT': "123",
+        'login_url': "https://url.com/123/login",
         'limit': 100,
-        'login': "login",
-        'password': "password",
+        'login': "l",
+        'password': "veryStrong",
         'id': 1
     }
 }
@@ -73,11 +70,11 @@ def update_user(user_id, email, new_expiry, server_id):
         response = session.post(url, data={"id": 1, "settings": json.dumps(payload["settings"])})
         if response.status_code == 200:
             logging.info("user updated plan")
-            bot.send_message(INFO_CHAT, f"(update expiry) new expiry set for {user_id}")
+            bot.send_message(-123, f"(update expiry) new expiry set for {user_id}")
             return "ok"
     else:
         logging.error("cannot update user plan")
-        bot.send_message(INFO_CHAT, f"(update expiry)max retries on {user_id} {response}")
+        bot.send_message(-123, f"(update expiry)max retries on {user_id} {response}")
         return "error"
 
 
@@ -86,11 +83,13 @@ def update_expired_status():
         cursor = conn.cursor()
 
         current_time = datetime.now()
+
         cursor.execute("""
             UPDATE users
             SET status = 'expired'
             WHERE expiry < %s AND status != 'expired'
         """, (current_time.strftime('%Y-%m-%d %H:%M'),))
+
         conn.commit()
 
 
@@ -98,6 +97,7 @@ def select_server():
     update_expired_status()
     with psycopg2.connect(connect_str) as conn:
         cursor = conn.cursor()
+
         cursor.execute("""
             SELECT server_id, COUNT(*) AS active_users_count
             FROM users
@@ -123,7 +123,7 @@ def select_server():
     print(candidates)
     print(f"SERVERS OVERLOADED BUT SELECTED SERVER {candidates[0][1]}")
     serverinfo = f"limit: {servers[candidates[0][1]]['limit']} \ncurrent overload: {candidates[0][0]}"
-    bot.send_message(INFO_CHAT, f"SERVERS OVERLOADED BUT SELECTED SERVER {candidates[0][1]}\n{serverinfo}")
+    bot.send_message(-123, f"SERVERS OVERLOADED BUT SELECTED SERVER {candidates[0][1]}\n{serverinfo}")
     return servers[candidates[0][1]]
 
 
@@ -139,7 +139,7 @@ def create_ssesion(server):
                 "username": server['login'],
                 "password": server['password']
             }
-            # verify = "server.crt"
+            # verify = "server.crt" 
             session.post(server['login_url'], data=login_payload)
             return session
         except Exception as e:
@@ -181,6 +181,7 @@ def add_client(email, client_id, total_gb, expiry_days):
     retries = 0
     while retries < MAX_RETRIES:
         response = session.post(url, data={"id": 1, "settings": json.dumps(payload["settings"])})
+
         if response.status_code == 200:
             connection_url = (
                 f"vless://{client_id}@{server['SERVER_ADDRESS']}:{server['SERVER_PORT']}/?"
@@ -188,9 +189,9 @@ def add_client(email, client_id, total_gb, expiry_days):
                 f"sid={server['SHORT_ID']}&spx=%2F&flow=xtls-rprx-vision#{server['CONNECTION_NAME']}-{email}"
             )
             logging.info("user added")
-            bot.send_message(INFO_CHAT, f"new user added ok")
+            bot.send_message(-123, f"new user added ok")
             return response.status_code, response.text, connection_url, server['id']
     else:
         logging.error("cannot add user")
-        bot.send_message(INFO_CHAT, f"ERROR ADDING USER")
+        bot.send_message(-123, f"ERROR ADDING USER")
         return response.status_code, response.text, None, None, None

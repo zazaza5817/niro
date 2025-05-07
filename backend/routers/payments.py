@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status # type: ignore
 from typing import List
 from config import settings
 import services.payments as payment_service
@@ -14,4 +14,11 @@ async def select_plan(selected_plan: str, auth_data: str):
 
 @router.get("/get_plans", response_model=List[Plan], status_code=status.HTTP_200_OK)
 async def get_plans():
-    return list(settings.plans.values())
+    plans_list = []
+    for key, plan in settings.plans.items():
+        plans_list.append({
+            "id": key, 
+            "name": plan["name"],
+            "price_per_month": plan["price_per_month"]
+        })
+    return plans_list

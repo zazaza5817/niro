@@ -1,14 +1,16 @@
-import telebot
-from telebot.types import LabeledPrice
-from fastapi import HTTPException, status
+import telebot # type: ignore
+from telebot.types import LabeledPrice # type: ignore
+from fastapi import HTTPException, status # type: ignore
+import logging
 from config import settings
 import services.users as user_service
+
+logger = logging.getLogger("my_app")
 
 
 async def select_plan(selected_plan: str, auth_data: str):
     if not user_service.check_telegram_auth(auth_data, settings.telegram_bot_token):
-         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Telegram auth data")
-
+         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Telegram auth data")
     plan = settings.plans_invoice.get(selected_plan)
     if not plan:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid plan selected")

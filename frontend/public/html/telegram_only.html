@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NiroVPN - Доступно только в Telegram</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      text-align: center;
+      color: white;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #0088cc, #8f5db7);
+    }
+    
+    .gradient-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+                        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+                        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+    }
+    
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+      max-width: 90%;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+    }
+    
+    .title {
+      margin-bottom: 16px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+    
+    .description {
+      margin-bottom: 24px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: white;
+      color: #0088cc;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+    
+    .button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="/icons/envelope.svg">
+</head>
+<body>
+  <div class="container">
+    <div class="gradient-overlay"></div>
+    
+    <div class="card">
+      <img src="/icons/telegram.svg" class="logo" alt="Telegram">
+      
+      <h1 class="title">Доступно только в Telegram</h1>
+      
+      <p class="description">
+        Это приложение работает только внутри Telegram.<br>
+        Пожалуйста, используйте ссылку ниже для перехода к боту:
+      </p>
+      
+      <a href="https://t.me/nirovpnbot" class="button">
+        Открыть @nirovpnbot
+      </a>
+    </div>
+  </div>
+</body>
+</html>

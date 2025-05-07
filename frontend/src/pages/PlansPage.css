@@ -1,0 +1,80 @@
+.subscription-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.plans-title {
+  background-color: transparent !important;
+  color: var(--tg-theme-text-color) !important;
+}
+
+.plan-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  font-size: 18px;
+  background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+  color: var(--tg-theme-text-color);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  max-width: 500px;
+  height: 55px;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .plan-button:hover {
+    background-color: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color, white);
+  }
+}
+
+@media (hover: none) {
+  .plan-button:active {
+    background-color: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color, white);
+    transition: background-color 0.1s;
+  }
+  
+  .plan-button:hover {
+    background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    color: var(--tg-theme-text-color);
+  }
+}
+
+.plan-price-container {
+  display: flex;
+  align-items: center;
+  background-color: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color, white);
+  padding: 5px 0px;
+  border-radius: 50px;
+  width: 140px;
+  justify-content: center;
+}
+
+.plan-price {
+  font-size: 18px;
+}
+
+.star-icon {
+  vertical-align: middle;
+  margin-right: 5px;
+  margin-left: 1px;
+  margin-bottom: 1px;
+}
+
+.plan-name {
+  font-size: 18px;
+  flex-grow: 1;
+  margin-right: 10px;
+  padding-left: 4px;
+}

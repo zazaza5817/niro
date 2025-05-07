@@ -20,7 +20,6 @@ import json
 SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 connect_str = os.environ.get('DATABASE_URL')
 tg_token = os.environ.get('TG_TOKEN')
-INFO_CHAT = os.environ.get('INFO_CHAT_ID')
 
 
 with open('/app/data/plans.json', 'r') as file:
@@ -42,12 +41,11 @@ def generate_conf(message, plan):
     logging.info("email generated")
     status_code, response_text, connection_url, server_id = add_client(email, client_id, 0, plan['duration'])
     if status_code != 200:
-        print(INFO_CHAT, f"(generate conf)max retries on {message.chat.id} {response_text}")
+        print(-4516170921, f"(generate conf)max retries on {message.chat.id} {response_text}")
         print(message.chat.id, f"Ошибка! Обратитесь в поддержку")
         logging.error("MAX RETRIES")
         return
     logging.info("CONFIGURATION CREATED")
-    # Генерация JWT токена
     token_data = {
         'user_id': user_id,
         'email': email
@@ -65,7 +63,7 @@ def generate_conf(message, plan):
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         ''', (user_id, 'active', expiry_datetime_str, connection_url, email, client_id, server_id, jwt_token))
         conn.commit()
-        bot.send_message(INFO_CHAT, f"(generate conf) new conf created for @{message.from_user.username}")
+        bot.send_message(-4516170921, f"(generate conf) new conf created for @{message.from_user.username}")
         logging.info("db updated")
 
 def set_expiry(message, new_expiry):
@@ -85,7 +83,7 @@ def set_expiry(message, new_expiry):
 @bot.message_handler(commands=['start'])
 def start_message(message):
     markup = types.InlineKeyboardMarkup()
-    web_app_info = types.WebAppInfo("https://nirovpn.com")
+    web_app_info = types.WebAppInfo("https://nirovpn.com")  # Замените на URL вашего миниприложения
     miniapp_button = types.InlineKeyboardButton(text="niro vpn", web_app=web_app_info)
     markup.add(miniapp_button)
     bot.send_message(message.chat.id,
@@ -100,7 +98,7 @@ def start_message(message):
 @bot.message_handler(commands=['info'])
 def start_message(message):
     markup = types.InlineKeyboardMarkup()
-    web_app_info = types.WebAppInfo("https://nirovpn.com")
+    web_app_info = types.WebAppInfo("https://nirovpn.com")  # Замените на URL вашего миниприложения
     miniapp_button = types.InlineKeyboardButton(text="niro vpn", web_app=web_app_info)
     markup.add(miniapp_button)
 
@@ -138,7 +136,7 @@ def checkout(pre_checkout_query):
 def handle_payment(message):
     try:
         payload = message.successful_payment.invoice_payload
-        bot.send_message(INFO_CHAT, f"new payment (ENVELOPE) from @{message.from_user.username} ({message.from_user.id})")
+        bot.send_message(-4516170921, f"new payment (ENVELOPE) from @{message.from_user.username} ({message.from_user.id})")
         plan = plans_invoice[payload]
         user_id = message.from_user.id
         with psycopg2.connect(connect_str) as conn:
@@ -170,7 +168,7 @@ def handle_payment(message):
             logging.info("just add time")
     except:
         logging.exception("Ошибка обработки оплаты!")
-        bot.send_message(INFO_CHAT, f"payment process error @{message.from_user.username} ({message.from_user.id})")
+        bot.send_message(-4516170921, f"payment process error @{message.from_user.username} ({message.from_user.id})")
 
 
 while True:
