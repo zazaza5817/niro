@@ -1,21 +1,179 @@
+/* RedirectPage.css - стили для страницы перенаправления */
 .redirect-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   text-align: center;
-  height: 80vh;
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #0088cc, #8f5db7);
+  overflow: hidden;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
-.redirect-container h1 {
+.redirect-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+}
+
+.redirect-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  max-width: 90%;
+  min-height: 360px;
+  position: relative;
+}
+
+.redirect-logo {
+  width: 80px;
+  height: 80px;
   margin-bottom: 20px;
-  color: var(--tg-theme-text-color);
 }
 
-.redirect-container p {
-  color: var(--tg-theme-text-color);
+.redirect-title {
+  margin-bottom: 16px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.redirect-description {
+  margin-bottom: 24px;
   font-size: 16px;
-  line-height: 1.5;
-  max-width: 400px;
+  line-height: 1.6;
+}
+
+.redirect-loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.redirect-status {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.redirect-error {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.redirect-button {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.redirect-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.redirect-button:active {
+  transform: scale(0.98);
+}
+
+.redirect-secondary-button {
+  transition: all 0.3s ease;
+}
+
+.redirect-secondary-button:hover {
+  transform: translateY(-2px);
+}
+
+/* Контейнер для кнопок */
+.redirect-buttons-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  align-items: center;
+}
+
+/* Основная кнопка открытия приложения */
+.redirect-primary-button {
+  background: white;
+  color: #0088cc;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.redirect-primary-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.redirect-primary-button:active {
+  transform: scale(0.98);
+}
+
+/* Кнопка копирования */
+.redirect-copy-button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 25px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 220px;
+}
+
+.redirect-copy-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.redirect-copy-button:active {
+  transform: translateY(0);
 }

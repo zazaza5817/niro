@@ -15,6 +15,7 @@ function ConfigPage({ theme }) {
     fetchConfig()
   }, [theme])
   
+  // Настройка кнопки "Назад"
   const setupBackButton = () => {
     const tg = window.Telegram?.WebApp
     
@@ -55,7 +56,7 @@ function ConfigPage({ theme }) {
     if (tg) tg.HapticFeedback.impactOccurred('light')
     
     if (os === 'iOS' || os === 'MacOS') {
-      window.open('https://apps.apple.com/us/app/streisand/id6450534064', '_blank')
+      window.open('https://apps.apple.com/au/app/v2raytun/id6476628951', '_blank')
     } else if (os === 'Android') {
       window.open('https://play.google.com/store/apps/details?id=app.hiddify.com', '_blank')
     } else if (os === 'Windows') {
@@ -81,7 +82,7 @@ function ConfigPage({ theme }) {
     if (os === 'Windows') {
       formattedConfigUrl = `https://nirovpn.com/redirect?config_url=${encodeURIComponent(configUrl)}`
     } else if (os === 'iOS' || os === 'MacOS') {
-      formattedConfigUrl = `streisand://import/${configUrl}`
+      formattedConfigUrl = `v2raytun://import/${configUrl}`
     } else if (os === 'Android') {
       formattedConfigUrl = `hiddify://import/${configUrl}`
     }
@@ -107,11 +108,14 @@ function ConfigPage({ theme }) {
     if (!tg) return
     
     try {
-      const response = await fetch(`api/check_subscription?auth_data=${encodeURIComponent(tg.initData)}`, {
-        method: 'GET',
+      const response = await fetch('api/users/check_subscription', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+          auth_data: tg.initData
+        })
       })
       
       if (!response.ok) {

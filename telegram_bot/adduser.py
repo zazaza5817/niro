@@ -1,8 +1,8 @@
-import requests
+import requests # type: ignore
 import json
 from datetime import datetime, timedelta
-import telebot
-import psycopg2
+import telebot # type: ignore
+import psycopg2 # type: ignore
 import os
 
 import logging
@@ -33,7 +33,6 @@ servers = {
 }
 
 MAX_RETRIES = 10
-
 
 def calculate_expiry_time(days):
     expiry_date = datetime.now() + timedelta(days=days)
@@ -139,7 +138,8 @@ def create_ssesion(server):
                 "username": server['login'],
                 "password": server['password']
             }
-            # verify = "server.crt" 
+            # если инстанс vless без домена
+            # verify = "server.crt"
             session.post(server['login_url'], data=login_payload)
             return session
         except Exception as e:
@@ -149,15 +149,17 @@ def create_ssesion(server):
             retries += 1
 
 
-# Функция для отправки запроса на добавление клиента
 def add_client(email, client_id, total_gb, expiry_days):
     server = select_server()
     url = f"{server['BASE_URL']}/inbound/addClient"
 
+    # Преобразование гигабайтов в байты
     total_gb_in_bytes = total_gb * 1024 * 1024 * 1024
 
+    # Расчет времени истечения
     expiry_time = calculate_expiry_time(expiry_days)
 
+    # Формирование payload
     payload = {
         "id": 1,
         "settings": {
@@ -182,7 +184,9 @@ def add_client(email, client_id, total_gb, expiry_days):
     while retries < MAX_RETRIES:
         response = session.post(url, data={"id": 1, "settings": json.dumps(payload["settings"])})
 
+        # Проверка успешности добавления клиента
         if response.status_code == 200:
+            # Формирование ссылки на подключение
             connection_url = (
                 f"vless://{client_id}@{server['SERVER_ADDRESS']}:{server['SERVER_PORT']}/?"
                 f"type=tcp&security=reality&pbk={server['PUBLIC_KEY']}&fp=chrome&sni=google.com&"

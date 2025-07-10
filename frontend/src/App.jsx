@@ -10,6 +10,7 @@ function App() {
   const [theme, setTheme] = useState(null)
 
   useEffect(() => {
+    // Проверяем, доступен ли Telegram Web App
     if (window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp
       

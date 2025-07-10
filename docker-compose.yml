@@ -21,6 +21,8 @@ services:
       - TG_TOKEN=${TG_TOKEN}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - DEBUG=${DEBUG}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - TG_BOT_USERNAME=${TG_BOT_USERNAME}
 
     depends_on:
       - db
@@ -38,6 +40,7 @@ services:
     depends_on:
       - frontend
       - backend
+      - grafana
     restart: always
 
   db:
@@ -50,6 +53,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./db_init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
 
   telegram_bot:
     build: ./telegram_bot
@@ -60,11 +65,62 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - TG_TOKEN=${TG_TOKEN}
+      - API_BASE_URL=${API_BASE_URL}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
     volumes:
       - ./logs:/app/logs
       - ./settings:/app/data
     restart: always
 
+  # Мониторинг и метрики
+  nginx_exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    command:
+      - '-nginx.scrape-uri=http://nginx/nginx_status'
+    depends_on:
+      - nginx
+    restart: always
+
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
+    depends_on:
+      - db
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=https://nirovpn.com/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    restart: always
+    depends_on:
+      - prometheus
+
 volumes:
   pgdata:
   frontend_build:
+  prometheus_data:
+  grafana_data:

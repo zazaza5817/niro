@@ -23,6 +23,7 @@ except Exception as e:
 
 class Settings(BaseSettings):
     telegram_bot_token: str
+    telegram_bot_username: str
     database_url: str
     secret_key: str
     plans: Dict
@@ -72,9 +73,13 @@ if plans_json:
 
 settings = Settings(
     telegram_bot_token = os.getenv('TG_TOKEN'),
+    telegram_bot_username = os.getenv('TG_BOT_USERNAME', 'mega_bot'),
     database_url = os.getenv('DATABASE_URL'),
     secret_key = os.getenv('JWT_SECRET_KEY'),
     debug = os.getenv('DEBUG', '0').lower() in ('1', 'true', 't', 'yes', 'y'),
     plans = plans_data,
     plans_invoice = plans_invoice_data
 )
+
+logger.info(f"Загружены планы: {settings.plans}")
+logger.info(f"Загружены планы счетов: {settings.plans_invoice}")

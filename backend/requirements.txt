@@ -8,3 +8,5 @@ requests
 telebot
 httpx
 psycopg2-binary
+prometheus-client
+prometheus-fastapi-instrumentator

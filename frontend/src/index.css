@@ -31,6 +31,7 @@ body {
   min-height: 100vh;
 }
 
+/* Базовый стиль кнопки без эффектов наведения */
 .button {
   display: flex;
   align-items: center;
@@ -47,6 +48,7 @@ body {
   max-width: 500px;
 }
 
+/* Только для устройств с мышью (десктопы) */
 @media (hover: hover) {
   .button:hover {
     background-color: var(--tg-theme-button-color);
@@ -54,6 +56,7 @@ body {
   }
 }
 
+/* Только для тачскрин-устройств */
 @media (hover: none) {
   .button:active {
     background-color: var(--tg-theme-button-color);

@@ -1,24 +1,22 @@
-from fastapi import APIRouter, status # type: ignore
-from typing import List
+from backend.services.internal_auth import verify_internal_api_key
+from fastapi import APIRouter, status, Query, Depends # type: ignore
+from typing import List, Optional
 from config import settings
-import services.payments as payment_service
-from models.plan import Plan
+from services.payments import PaymentService
+from services.pricing import PricingService
+from models.pricing import PlanPriceRequest, PlanWithDiscount, PriceInfo
+from models.payment import SelectPlanRequest
 
 router = APIRouter()
 
 
 @router.post("/select_plan", status_code=status.HTTP_200_OK)
-async def select_plan(selected_plan: str, auth_data: str):
-   await payment_service.select_plan(selected_plan, auth_data)
+async def select_plan(request: SelectPlanRequest):
+   """Отправляет пользователю инвойс для оплаты выбранного плана"""
+   await PaymentService.select_plan(request.selected_plan, request.auth_data)
    return {"response": "OK"}
 
-@router.get("/get_plans", response_model=List[Plan], status_code=status.HTTP_200_OK)
-async def get_plans():
-    plans_list = []
-    for key, plan in settings.plans.items():
-        plans_list.append({
-            "id": key, 
-            "name": plan["name"],
-            "price_per_month": plan["price_per_month"]
-        })
-    return plans_list
+@router.get("/get_plans", response_model=List[PlanWithDiscount], status_code=status.HTTP_200_OK)
+async def get_plans(user_tg_id: Optional[int] = Query(None)):
+    """Получает список планов с учетом реферальных планов пользователя"""
+    return await PricingService.get_plans_with_discount(user_tg_id)

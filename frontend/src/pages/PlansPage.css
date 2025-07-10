@@ -30,6 +30,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Эффекты наведения только для устройств с мышью (десктопы) */
 @media (hover: hover) {
   .plan-button:hover {
     background-color: var(--tg-theme-button-color);
@@ -37,6 +38,7 @@
   }
 }
 
+/* Эффекты для тачскрин-устройств */
 @media (hover: none) {
   .plan-button:active {
     background-color: var(--tg-theme-button-color);
@@ -59,10 +61,25 @@
   border-radius: 50px;
   width: 140px;
   justify-content: center;
+  position: relative; /* Для позиционирования бейджа скидки */
 }
 
 .plan-price {
   font-size: 18px;
+}
+
+.discount-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff4444;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: bold;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  z-index: 1;
 }
 
 .star-icon {

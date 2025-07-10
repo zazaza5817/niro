@@ -20,7 +20,11 @@ const isTelegramWebApp = () => {
   );
 };
 
-if (!isTelegramWebApp()) {
+const isRedirectPage = () => {
+  return window.location.pathname === '/redirect';
+};
+
+if (!isTelegramWebApp() && !isRedirectPage()) {
   const favicon = document.createElement('link');
   favicon.rel = 'icon';
   favicon.type = 'image/svg+xml';

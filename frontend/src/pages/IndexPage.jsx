@@ -44,15 +44,14 @@ function IndexPage({ theme, forceShowSkeleton = false }) {
     if (!tg) return
     
     try {
-      const params = new URLSearchParams({
-        auth_data: tg.initData
-      })
-      
-      const response = await fetch(`api/check_subscription?${params.toString()}`, {
-        method: 'GET',
+      const response = await fetch('api/users/check_subscription', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+          auth_data: tg.initData
+        })
       })
       
       if (!response.ok) {
